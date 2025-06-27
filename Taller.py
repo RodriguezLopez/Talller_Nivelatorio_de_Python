@@ -1,236 +1,214 @@
-def registrar_estudiante():
+def register_student():
     """
-    Permite al usuario registrar un nuevo estudiante.
-    Solicita nombre, identificación, edad y al menos 3 notas.
-    Implementa validaciones para cada entrada.
+    Allows the user to register a new student.
+    Requests name, ID, age, and at least 3 grades.
+    Implements validations for each input.
     """
-    print("\n--- 1. Registrar estudiante ---")
+    print("\n--- 1. Register student ---")
     
-    # --- Validación de la identificación ---
+    # --- ID validation ---
     while True:
         try:
-            identificacion = input("Ingrese el número de identificación (solo números): ")
-            # Se valida que la identificación sea un número y no esté vacía
-            if not identificacion.isdigit() or len(identificacion.strip()) == 0:
-                print("Error: La identificación debe ser un número válido.")
+            student_id = input("Enter the identification number (numbers only): ")
+            # Validates that the ID is numeric and not empty
+            if not student_id.isdigit() or len(student_id.strip()) == 0:
+                print("Error: The ID must be a valid number.")
                 continue
-            # Se verifica si el estudiante ya existe en el diccionario
-            if identificacion in estudiantes:
-                print(f"Error: El estudiante con identificación '{identificacion}' ya está registrado.")
-                return # Salir de la función si ya existe
+            # Checks if the student is already registered
+            if student_id in students:
+                print(f"Error: A student with ID '{student_id}' is already registered.")
+                return  # Exit the function if already exists
             break
         except Exception:
-            print("Entrada inválida. Por favor, ingrese un número.")
+            print("Invalid input. Please enter a number.")
 
-    # --- Validación del nombre ---
+    # --- Name validation ---
     while True:
-        nombre = input("Ingrese el nombre del estudiante: ").strip().title() # Capitaliza la primera letra de cada palabra
-        # Se valida que el nombre no esté vacío y contenga solo letras y espacios
-        if len(nombre) > 0 and all(c.isalpha() or c.isspace() for c in nombre):
+        name = input("Enter the student's name: ").strip().title()  # Capitalizes the first letter of each word
+        # Validates that the name is not empty and contains only letters and spaces
+        if len(name) > 0 and all(c.isalpha() or c.isspace() for c in name):
             break
         else:
-            print("Error: El nombre no puede estar vacío y solo debe contener letras.")
+            print("Error: The name cannot be empty and must contain only letters.")
 
-    # --- Validación de la edad ---
+    # --- Age validation ---
     while True:
         try:
-            edad_str = input("Ingrese la edad del estudiante (1-99): ")
-            edad = int(edad_str)
-            # Se valida que la edad esté en un rango razonable
-            if 1 <= edad <= 99:
+            age_str = input("Enter the student's age (1-99): ")
+            age = int(age_str)
+            # Validates that the age is within a reasonable range
+            if 1 <= age <= 99:
                 break
             else:
-                print("Error: La edad debe ser un número entre 1 y 99.")
+                print("Error: Age must be a number between 1 and 99.")
         except ValueError:
-            print("Error: Por favor, ingrese un número entero para la edad.")
+            print("Error: Please enter a whole number for the age.")
 
-    # --- Validación de las notas ---
-    notas = []
-    print("Ingrese las notas del estudiante (mínimo 3 notas).")
-    while len(notas) < 3:
+    # --- Grades validation ---
+    grades = []
+    print("Enter the student's grades (minimum 3 grades).")
+    while len(grades) < 3:
         try:
-            nota_str = input(f"Ingrese la nota #{len(notas) + 1} (0.0 a 5.0): ")
-            nota = float(nota_str)
-            # Se valida que la nota esté en el rango de 0.0 a 5.0
-            if 0.0 <= nota <= 5.0:
-                notas.append(nota)
+            grade_str = input(f"Enter grade #{len(grades) + 1} (0.0 to 5.0): ")
+            grade = float(grade_str)
+            # Validates that the grade is in range
+            if 0.0 <= grade <= 5.0:
+                grades.append(grade)
             else:
-                print("Error: La nota debe estar entre 0.0 y 5.0.")
+                print("Error: Grade must be between 0.0 and 5.0.")
         except ValueError:
-            print("Error: Por favor, ingrese un número decimal válido para la nota.")
+            print("Error: Please enter a valid decimal number for the grade.")
 
-    # Se crea el diccionario del estudiante y se añade al diccionario global
-    estudiantes[identificacion] = {
-        'nombre': nombre,
-        'edad': edad,
-        'notas': notas
+    # Creates the student dictionary and adds it to the global dictionary
+    students[student_id] = {
+        'name': name,
+        'age': age,
+        'grades': grades
     }
-    print(f"\n¡Estudiante '{nombre}' registrado exitosamente con ID: {identificacion}!\n")
+    print(f"\nStudent '{name}' successfully registered with ID: {student_id}!\n")
 
-def calcular_promedio(notas):
-    """Calcula el promedio de una lista de notas."""
-    # Se valida que la lista de notas no esté vacía para evitar división por cero
-    if not notas:
+def calculate_average(grades):
+    """Calculates the average of a list of grades."""
+    # Validates that the list is not empty to avoid division by zero
+    if not grades:
         return 0.0
-    # Se usa la función sum() para sumar todos los elementos y len() para contar la cantidad
-    return sum(notas) / len(notas)
+    return sum(grades) / len(grades)
 
-def consultar_estudiante():
+def consult_student():
     """
-    Permite al usuario consultar la información de un estudiante por su ID.
-    Muestra nombre, edad, notas y promedio.
+    Allows the user to view a student's information by ID.
+    Shows name, age, grades, and average.
     """
-    print("\n--- 2. Consultar estudiante ---")
-    identificacion = input("Ingrese el número de identificación del estudiante a consultar: ")
+    print("\n--- 2. Consult student ---")
+    student_id = input("Enter the student's ID to consult: ")
     
-    # Se verifica si la identificación existe en el diccionario
-    if identificacion in estudiantes:
-        estudiante = estudiantes[identificacion]
-        promedio = calcular_promedio(estudiante['notas'])
-        
-        print("\n--- Información del estudiante ---")
-        print(f"Nombre: {estudiante['nombre']}")
-        print(f"Identificación: {identificacion}")
-        print(f"Edad: {estudiante['edad']}")
-        print(f"Notas: {estudiante['notas']}")
-        print(f"Promedio: {promedio:.2f}") # Se formatea el promedio a 2 decimales
+    if student_id in students:
+        student = students[student_id]
+        avg = calculate_average(student['grades'])
+
+        print("\n--- Student Information ---")
+        print(f"Name: {student['name']}")
+        print(f"ID: {student_id}")
+        print(f"Age: {student['age']}")
+        print(f"Grades: {student['grades']}")
+        print(f"Average: {avg:.2f}")
         print("-" * 30)
     else:
-        # Mensaje de notificación si el estudiante no existe
-        print(f"\nError: No se encontró ningún estudiante con la identificación '{identificacion}'.")
+        print(f"\nError: No student found with ID '{student_id}'.")
 
-def actualizar_notas():
+def update_grades():
     """
-    Permite modificar las notas de un estudiante existente.
+    Allows modifying the grades of an existing student.
     """
-    print("\n--- 3. Actualizar notas ---")
-    identificacion = input("Ingrese la identificación del estudiante para actualizar sus notas: ")
+    print("\n--- 3. Update grades ---")
+    student_id = input("Enter the student's ID to update their grades: ")
     
-    # Se busca el estudiante en el diccionario
-    if identificacion in estudiantes:
-        estudiante = estudiantes[identificacion]
-        print(f"Estudiante encontrado: {estudiante['nombre']}. Notas actuales: {estudiante['notas']}")
-        
-        nuevas_notas = []
-        print("Ingrese las nuevas notas del estudiante (mínimo 3 notas).")
+    if student_id in students:
+        student = students[student_id]
+        print(f"Student found: {student['name']}. Current grades: {student['grades']}")
+
+        new_grades = []
+        print("Enter the new grades (minimum 3 grades).")
         while True:
-            # Se permite al usuario ingresar nuevas notas hasta que decida detenerse
-            # Este ciclo while es diferente al de registro, permite flexibilidad
             try:
-                nota_str = input(f"Ingrese la nota #{len(nuevas_notas) + 1} (o 'f' para finalizar): ")
-                # El usuario puede escribir 'f' para finalizar la entrada de notas
-                if nota_str.lower() == 'f':
-                    # Se valida que se hayan ingresado al menos 3 notas
-                    if len(nuevas_notas) >= 3:
-                        break # Salir del ciclo si hay suficientes notas
+                grade_str = input(f"Enter grade #{len(new_grades) + 1} (or 'f' to finish): ")
+                if grade_str.lower() == 'f':
+                    if len(new_grades) >= 3:
+                        break
                     else:
-                        print("Error: Debe ingresar un mínimo de 3 notas.")
-                        continue # Continuar pidiendo notas si no se cumple el mínimo
-                
-                nota = float(nota_str)
-                if 0.0 <= nota <= 5.0:
-                    nuevas_notas.append(nota)
+                        print("Error: You must enter at least 3 grades.")
+                        continue
+                grade = float(grade_str)
+                if 0.0 <= grade <= 5.0:
+                    new_grades.append(grade)
                 else:
-                    print("Error: La nota debe estar entre 0.0 y 5.0.")
+                    print("Error: Grade must be between 0.0 and 5.0.")
             except ValueError:
-                print("Error: Entrada inválida. Por favor, ingrese un número o 'f'.")
-        
-        # Se actualizan las notas en el diccionario del estudiante
-        estudiante['notas'] = nuevas_notas
-        promedio_nuevo = calcular_promedio(nuevas_notas)
-        print(f"\n¡Notas de '{estudiante['nombre']}' actualizadas exitosamente!")
-        print(f"Nuevo promedio: {promedio_nuevo:.2f}\n")
-    else:
-        print(f"\nError: No se encontró ningún estudiante con la identificación '{identificacion}'.")
+                print("Error: Invalid input. Enter a number or 'f'.")
 
-def eliminar_estudiante():
-    """
-    Permite eliminar el registro de un estudiante por su ID.
-    """
-    print("\n--- 4. Eliminar estudiante ---")
-    identificacion = input("Ingrese el número de identificación del estudiante a eliminar: ")
-    
-    # Se verifica si la identificación existe
-    if identificacion in estudiantes:
-        nombre_estudiante = estudiantes[identificacion]['nombre']
-        # Se usa del para eliminar el par clave-valor del diccionario
-        del estudiantes[identificacion]
-        print(f"\n¡El registro de '{nombre_estudiante}' ha sido eliminado exitosamente!\n")
+        student['grades'] = new_grades
+        new_avg = calculate_average(new_grades)
+        print(f"\nGrades updated successfully for '{student['name']}'!")
+        print(f"New average: {new_avg:.2f}\n")
     else:
-        print(f"\nError: No se encontró ningún estudiante con la identificación '{identificacion}'.")
+        print(f"\nError: No student found with ID '{student_id}'.")
 
-def ver_todos_los_estudiantes():
+def delete_student():
     """
-    Muestra una lista de todos los estudiantes registrados con su promedio.
-    Usa un ciclo for para recorrer el diccionario.
+    Allows deleting a student record by ID.
     """
-    print("\n--- 5. Listado general de estudiantes ---")
+    print("\n--- 4. Delete student ---")
+    student_id = input("Enter the student's ID to delete: ")
     
-    # Se valida si el diccionario de estudiantes está vacío
-    if not estudiantes:
-        print("No hay estudiantes registrados en el sistema.")
-        return # Salir de la función si no hay estudiantes
-    
-    # Se usa un bucle for para iterar sobre los elementos del diccionario
-    for identificacion, datos_estudiante in estudiantes.items():
-        promedio = calcular_promedio(datos_estudiante['notas'])
+    if student_id in students:
+        student_name = students[student_id]['name']
+        del students[student_id]
+        print(f"\nStudent record for '{student_name}' successfully deleted!\n")
+    else:
+        print(f"\nError: No student found with ID '{student_id}'.")
+
+def view_all_students():
+    """
+    Shows a list of all registered students with their average.
+    Uses a for loop to iterate over the dictionary.
+    """
+    print("\n--- 5. List of all students ---")
+
+    if not students:
+        print("No students registered in the system.")
+        return
+
+    for student_id, student_data in students.items():
+        avg = calculate_average(student_data['grades'])
         print(f"---------------------------------------------------")
-        print(f"ID: {identificacion}")
-        print(f"Nombre: {datos_estudiante['nombre']}")
-        print(f"Edad: {datos_estudiante['edad']}")
-        print(f"Promedio general: {promedio:.2f}")
+        print(f"ID: {student_id}")
+        print(f"Name: {student_data['name']}")
+        print(f"Age: {student_data['age']}")
+        print(f"Average grade: {avg:.2f}")
     print("---------------------------------------------------\n")
 
-def mostrar_menu():
+def show_menu():
     """
-    Imprime el menú de opciones para el usuario.
+    Prints the options menu for the user.
     """
     print("\n" + "="*40)
-    print("      SISTEMA DE GESTIÓN DE ESTUDIANTES")
+    print("      STUDENT MANAGEMENT SYSTEM")
     print("="*40)
-    print("1. Registrar estudiante")
-    print("2. Consultar estudiante")
-    print("3. Actualizar notas")
-    print("4. Eliminar estudiante")
-    print("5. Ver todos los estudiantes")
-    print("6. Salir")
+    print("1. Register student")
+    print("2. Consult student")
+    print("3. Update grades")
+    print("4. Delete student")
+    print("5. View all students")
+    print("6. Exit")
     print("="*40)
 
 # ==============================================================================
-# FLUJO PRINCIPAL DEL PROGRAMA
+# MAIN PROGRAM FLOW
 # ==============================================================================
 
-# Se utiliza un bucle while para mantener el programa en ejecución
-# hasta que el usuario decida salir.
 def main():
     """
-    Función principal que ejecuta el bucle del programa.
+    Main function that runs the program loop.
     """
     while True:
-        mostrar_menu()
-        opcion = input("Seleccione una opción (1-6): ")
-        
-        # Estructura de control if-elif-else para manejar las opciones del menú
-        if opcion == '1':
-            registrar_estudiante()
-        elif opcion == '2':
-            consultar_estudiante()
-        elif opcion == '3':
-            actualizar_notas()
-        elif opcion == '4':
-            eliminar_estudiante()
-        elif opcion == '5':
-            ver_todos_los_estudiantes()
-        elif opcion == '6':
-            print("\nGracias por usar el sistema. ¡Hasta luego!\n")
-            break # Salir del bucle y finalizar el programa
-        else:
-            # Mensaje de error para entradas inválidas
-            print("\nOpción no válida. Por favor, ingrese un número del 1 al 6.")
+        show_menu()
+        option = input("Select an option (1–6): ")
 
-# El bloque if __name__ == "__main__": asegura que la función main()
-# se ejecute solo cuando el script se corre directamente.
+        if option == '1':
+            register_student()
+        elif option == '2':
+            consult_student()
+        elif option == '3':
+            update_grades()
+        elif option == '4':
+            delete_student()
+        elif option == '5':
+            view_all_students()
+        elif option == '6':
+            print("\nThank you for using the system. Goodbye!\n")
+            break
+        else:
+            print("\nInvalid option. Please enter a number between 1 and 6.")
+
 if __name__ == "__main__":
     main()
-
-
